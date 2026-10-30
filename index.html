@@ -278,7 +278,7 @@ function advance(){S.cur++;if(S.cur>=S.game.length)S.screen='results';render()}
 function optRow(key,obj){return `<div class="opts">${Object.entries(obj).map(([k,v])=>`<button class="opt ${String(S[key])===String(k)?'on':''}" onclick="setOpt('${key}','${k}')">${v.t}${v.s?`<small>${v.s}</small>`:''}</button>`).join('')}</div>`}
 window.setOpt=(k,v)=>{S[k]=k==='rounds'?+v:v;save();render()};
 function menuHTML(){
-  return `<div class="menuhead"><div><div class="nwser"><b>Natural Wonders</b> · Game 1 of 10 · <a href="https://jmcpublic.github.io/">All games</a></div><h1>Rivers</h1></div><p class="sub">Up to five rivers on the map. The longest is given; put the others in order of length. The real lengths are revealed at the end.</p></div>
+  return `<div class="menuhead"><div><div class="nwser"><b>Natural Wonders</b> · Game 1 of 10 · <a href="https://twominute.games/wonders/">All games</a></div><h1>Rivers</h1></div><p class="sub">Up to five rivers on the map. The longest is given; put the others in order of length. The real lengths are revealed at the end.</p></div>
   <div class="panel menu"><div>
     <div class="label">Where</div>${optRow('where',WHERE)}
   </div><div>
@@ -339,7 +339,7 @@ function resultsHTML(){
   const sp=surprise?`<div class="surprise">😲 <b>Biggest surprise:</b> you put the ${esc(surprise.r.n)} ${ORD[surprise.pos]}, but at ${fmt(surprise.r.km)} km it's ${ORD[surprise.i]} in ${esc(surprise.sc.name)}.</div>`:`<div class="surprise">🎯 Every river in the right place. Remarkable!</div>`;
   return `<h1>Results</h1>
   <div class="panel"><div class="score"><div class="big">${right}/${total}</div><div><h2>${verdict(right/total)}</h2>${TM.summary(right,total,S.game.reduce((s,r)=>s+(r.secs||0),0))}<div style="color:var(--muted);font-size:14px">Natural Wonders · Rivers · ${WHERE[S.where].t.replace('🎲 ','')} · rank ${DEPTH[S.depth].t} · ${S.game.length} rounds</div></div></div>
-  ${sp}<div class="row" style="margin-top:16px"><button class="btn" onclick="startGame()">Play again</button><button class="btn ghost" onclick="quit()">Change settings</button><button class="btn ghost" onclick="share(${right},${total})">Share score</button><button class="btn ghost" onclick="openSources()">Sources</button><a class="btn ghost" href="https://jmcpublic.github.io/">More games</a></div></div>
+  ${sp}<div class="row" style="margin-top:16px"><button class="btn" onclick="startGame()">Play again</button><button class="btn ghost" onclick="quit()">Change settings</button><button class="btn ghost" onclick="share(${right},${total})">Share score</button><button class="btn ghost" onclick="openSources()">Sources</button><a class="btn ghost" href="https://twominute.games/wonders/">More games</a></div></div>
   <div class="label" style="margin-top:24px">Round by round</div>${cards.join('')}
   <p class="foot">Every length is shown exactly as published by the source named under each round. <button class="srclink" onclick="openSources()">See all sources</button></p>`;
 }
