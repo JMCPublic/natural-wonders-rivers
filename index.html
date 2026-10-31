@@ -195,7 +195,7 @@ const ORD=['1st','2nd','3rd','4th','5th'];
 const LET='abcde';
 // Rivers this close in length never share a round (sources disagree), except well-established pairs
 const MINGAP=1.05;const OKPAIRS=[['Severn','Thames'],['Adige','Tiber']];
-let S={screen:'menu',where:'countries',depth:5,rounds:5,layout:'auto',game:[],cur:0};
+let S={screen:'menu',where:'countries',depth:3,rounds:5,layout:'auto',game:[],cur:0};
 try{const s=JSON.parse(localStorage.getItem('nwr_settings')||'{}');['where','depth','rounds','layout'].forEach(k=>{if(s[k]!==undefined)S[k]=s[k]})}catch(e){}
 if(!WHERE[S.where])S.where='countries';
 function save(){try{localStorage.setItem('nwr_settings',JSON.stringify({where:S.where,depth:S.depth,rounds:S.rounds,layout:S.layout}))}catch(e){}}
