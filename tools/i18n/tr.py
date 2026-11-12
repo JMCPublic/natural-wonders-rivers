@@ -45,7 +45,7 @@ T = {
  'foot': '${COUNTRY_IDS.length} ülke ve 5 kıta · Natural Wonders: Nehirler ${VERSION} · <button class="srclink" onclick="openSources()">Kaynaklar</button>',
  'nogame': "'Bu ayarlarla oyun hazırlanamadı. Tekrar dene.'",
  'ord1': '<span class="ord">${ORD[0]}</span>',
- 'given': '<span class="given">En uzun · verildi</span>',
+ 'given': '<span class="given">Verildi</span>',
  'place_aria': 'aria-label="${ORD[i]} sıra"',
  'empty': '<span class="empty">aşağıdan bir nehre dokun</span>',
  'prev': '>← Önceki</button>',

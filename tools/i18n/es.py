@@ -47,7 +47,7 @@ T = {
  'foot': '${COUNTRY_IDS.length} países y 5 continentes · Natural Wonders: Ríos ${VERSION} · <button class="srclink" onclick="openSources()">Fuentes</button>',
  'nogame': "'No se pudo preparar una partida con esos ajustes. Inténtalo de nuevo.'",
  'ord1': '<span class="ord">${ORD[0]}</span>',
- 'given': '<span class="given">El más largo · dado</span>',
+ 'given': '<span class="given">Dado</span>',
  'place_aria': 'aria-label="Puesto ${ORD[i]}"',
  'empty': '<span class="empty">toca un río abajo</span>',
  'prev': '>← Anterior</button>',

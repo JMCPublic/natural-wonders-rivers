@@ -72,6 +72,8 @@ h2{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:21px;margin:0 0 
 .fill b{overflow-wrap:anywhere}
 .empty{color:#b3a993;font-size:13px}
 .given{margin-left:auto;font-size:10px;font-weight:700;color:var(--cu);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+/* narrow phones: the 'given' tag wraps instead of the river name breaking mid-word */
+@media (max-width:380px){.fill b{overflow-wrap:normal;word-break:normal}.given{white-space:normal;text-align:right;line-height:1.2;max-width:38%;letter-spacing:.04em}}
 .x{margin-left:auto;color:#b3a993;font-size:13px}
 .tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .tile{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:6px 12px 6px 6px;font-weight:600;font-size:15px;cursor:pointer}
@@ -164,7 +166,7 @@ html.phone body.timed .rank .btn:not([disabled]){position:sticky!important;botto
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"></div>
 <script>
-const VERSION='v7';
+const VERSION='v8';
 /* ---------- timer (shared) ---------- */
 const TM={on:true,left:0,secs:15,copper:5,t0:0,iv:null,key:null,onUp:null,
   start(key,secs,copper,onUp){if(!this.on){this.hide();return}if(this.key===key&&this.iv)return;this.stop();this.key=key;this.secs=secs;this.copper=copper;this.onUp=onUp;this.t0=performance.now();this.build();this.draw(secs);
@@ -302,7 +304,7 @@ function playHTML(){
   const prog=S.game.map((_,i)=>`<i class="${i<S.cur?'done':i===S.cur?'now':''}"></i>`).join('');
   const where=sc.type==='country'?sc.name:sc.name;
   const full=R.slots.every(Boolean);
-  const slots=R.slots.map((L,i)=>{if(i===0)return `<div class="slot fixed"><span class="ord">${ORD[0]}</span><span class="fill"><span class="plate">A</span><b>${esc(byL.a.n)}</b><span class="given">El más largo · dado</span></span></div>`;
+  const slots=R.slots.map((L,i)=>{if(i===0)return `<div class="slot fixed"><span class="ord">${ORD[0]}</span><span class="fill"><span class="plate">A</span><b>${esc(byL.a.n)}</b><span class="given">Dado</span></span></div>`;
     return `<button class="slot ${L?'full':''}" onclick="unslot(${i})" aria-label="Puesto ${ORD[i]}"><span class="ord">${ORD[i]}</span><span class="fill">${L?`<span class="plate">${L.toUpperCase()}</span><b>${esc(byL[L].n)}</b><span class="x">✕</span>`:'<span class="empty">toca un río abajo</span>'}</span></button>`}).join('');
   const tiles=R.rivers.filter(r=>r.L!=='a').sort((a,b)=>a.L.localeCompare(b.L)).map(r=>`<button class="tile ${R.slots.includes(r.L)?'used':''}" onclick="place('${r.L}')"><span class="plate">${r.L.toUpperCase()}</span>${esc(r.n)}</button>`).join('');
   return `<div class="play"><div class="top"><h1>Ríos</h1><div class="row">${S.cur>0&&!TM.on?'<button class="link" onclick="back()">← Anterior</button>':''}<button class="link" onclick="quit()">Salir</button></div></div>
@@ -385,6 +387,7 @@ html.phone.nwfit-on .board>.mapcard{height:auto;flex:1 1 0;min-height:0;margin-b
 html.phone.nwfit-on .board>.rank{flex:none;overflow:hidden}
 html.nwfit-on .rank{overflow:hidden}
 /* tighter spacing when the window is short, before anything has to shrink */
+@media (max-height:600px){html.phone.nwfit-on .q .note{display:none}}
 @media (max-height:760px){
  html.phone.nwfit-on .slot{min-height:38px;padding:3px 10px}
  html.phone.nwfit-on .slots{gap:5px}
@@ -411,6 +414,8 @@ function zoomKids(el,z){[...el.children].forEach(c=>{c.style.zoom=z===1?'':z})}
 function fit(){busy=true;const root=document.documentElement;
   const play=[...document.querySelectorAll('.play')].find(p=>p.offsetParent&&p.querySelector('.board,.pair,.grid5,.plist'));
   if(!play){root.classList.remove('nwfit-on');busy=false;return}
+  // a screen already found too tall for this phone keeps normal scrolling until the next round
+  if(play.dataset.nofit){root.classList.remove('nwfit-on');busy=false;return}
   root.classList.add('nwfit-on');window.scrollTo(0,0);
   const phone=root.classList.contains('phone');
   // the play area runs from where it starts down to the timer bar (or the bottom of the window)
@@ -421,10 +426,21 @@ function fit(){busy=true;const root=document.documentElement;
   if(board&&rank){
     zoomKids(rank,1);
     if(phone){
-      // phone: answers keep their natural size; the map gives up space, down to a sensible minimum
-      const bh=board.clientHeight,minMap=Math.max(110,Math.min(240,bh*.3));
+      // phone: answers keep their natural size; the map gives up space, down to a sensible minimum.
+      // Heights are set in pixels here: older iPhone Safari squashes the map to nothing if flexbox is left to share the space.
+      const mc=board.querySelector(':scope>.mapcard');
+      const bh=Math.max(0,Math.floor(play.getBoundingClientRect().bottom-board.getBoundingClientRect().top));
+      board.style.height=bh+'px';
+      const minMap=Math.max(H()<600?90:110,Math.min(240,bh*.3));
       const need=rank.scrollHeight,room=bh-minMap-8;
       if(need>room){const z=Math.max(.78,room/need);zoomKids(rank,z)}
+      const rh=Math.ceil(rank.getBoundingClientRect().height);
+      if(rh>bh-minMap-8+2){
+        // still too tall even shrunk (a very small phone): give the page back its normal scrolling, so the answers and
+        // the lock-in button can always be reached
+        zoomKids(rank,1);board.style.height='';play.style.height='';if(mc){mc.style.flex='';mc.style.removeProperty('height')}
+        play.dataset.nofit='1';root.classList.remove('nwfit-on');busy=false;return}
+      if(mc){mc.style.flex='none';mc.style.setProperty('height',(bh-rh-8)+'px','important')}
     }else{
       // desktop: the answer panel never scrolls; if it is short of room, its contents shrink to fit
       const cs=getComputedStyle(rank),p=parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom);
@@ -439,7 +455,7 @@ function fit(){busy=true;const root=document.documentElement;
 function soon(){if(busy){queued=true;return}setTimeout(fit,16)}
 new MutationObserver(m=>{if(m.some(x=>x.type==='childList'))soon()}).observe(document.body,{childList:true,subtree:true});
 addEventListener('resize',soon);if(window.visualViewport)visualViewport.addEventListener('resize',soon);
-addEventListener('orientationchange',()=>setTimeout(soon,250));
+addEventListener('orientationchange',()=>{document.querySelectorAll('[data-nofit]').forEach(e=>delete e.dataset.nofit);setTimeout(soon,250)});
 if(document.fonts)document.fonts.ready.then(soon);soon();
 })();
 </script>

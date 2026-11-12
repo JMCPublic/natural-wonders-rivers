@@ -46,7 +46,7 @@ T = {
  'foot': '${COUNTRY_IDS.length} Länder und 5 Kontinente · Natural Wonders: Flüsse ${VERSION} · <button class="srclink" onclick="openSources()">Quellen</button>',
  'nogame': "'Mit diesen Einstellungen ließ sich kein Spiel bauen. Bitte nochmal versuchen.'",
  'ord1': '<span class="ord">${ORD[0]}</span>',
- 'given': '<span class="given">Der längste · vorgegeben</span>',
+ 'given': '<span class="given">Vorgegeben</span>',
  'place_aria': 'aria-label="Platz ${ORD[i]}"',
  'empty': '<span class="empty">tippe unten auf einen Fluss</span>',
  'prev': '>← Zurück</button>',

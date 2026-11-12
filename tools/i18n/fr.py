@@ -48,7 +48,7 @@ T = {
  'foot': '${COUNTRY_IDS.length} pays et 5 continents · Natural Wonders : Fleuves ${VERSION} · <button class="srclink" onclick="openSources()">Sources</button>',
  'nogame': "'Impossible de préparer une partie avec ces réglages. Réessayez.'",
  'ord1': '<span class="ord">${ORD[0]}</span>',
- 'given': '<span class="given">Le plus long · donné</span>',
+ 'given': '<span class="given">Donné</span>',
  'place_aria': 'aria-label="${ORD[i]} place"',
  'empty': '<span class="empty">touchez un fleuve ci-dessous</span>',
  'prev': '>← Précédent</button>',

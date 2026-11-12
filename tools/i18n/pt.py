@@ -47,7 +47,7 @@ T = {
  'foot': '${COUNTRY_IDS.length} países e 5 continentes · Natural Wonders: Rios ${VERSION} · <button class="srclink" onclick="openSources()">Fontes</button>',
  'nogame': "'Não deu para montar uma partida com essas configurações. Tente de novo.'",
  'ord1': '<span class="ord">${ORD[0]}</span>',
- 'given': '<span class="given">O mais comprido · dado</span>',
+ 'given': '<span class="given">Dado</span>',
  'place_aria': 'aria-label="${ORD[i]} lugar"',
  'empty': '<span class="empty">toque em um rio abaixo</span>',
  'prev': '>← Anterior</button>',
